@@ -1,0 +1,353 @@
+@font-face {
+  font-family:HebrewFont;
+  src: url(abraham.ttf);
+}
+@font-face {
+  font-family:EnglishFont;
+  src: url(youtube-sans-bold.ttf);
+}
+
+body {
+  font-family: EnglishFont;
+  background-color: rgb(15, 15, 15);
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px;
+  margin-top: 60px;
+}
+
+.main-content {
+  width: 70%;
+}
+
+.sidebar {
+  width: 25%;
+}
+
+.video-preview {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  background-color: #000000; /* Black background for letterboxing */
+  overflow: hidden;
+}
+
+.video-preview video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  width: 100%;
+  height: 100%;
+  object-fit: contain; 
+  background-color: #000; /* Ensure any empty space is black */
+}
+
+.video-preview.mobile {
+  width: 35%; /* Adjust this percentage to make mobile videos smaller */
+  padding-top: 61.88%; /* Adjust to maintain the aspect ratio */
+  margin-left: 600px;
+}
+
+.video-preview.mobile video {
+  object-fit: contain;
+}
+
+
+
+
+.video-player video { 
+  width: 100%;
+  height: auto;
+}
+
+.video-name {
+  font-family: EnglishFont;
+  color:#ddd;
+  font-size: 24px;
+  margin-top: 0px;
+  text-align: left; 
+}
+
+.video-title {
+  color:#ddd;
+  font-size: 24px;
+  margin-top: 20px;
+  text-align: left; 
+  display: block;
+}
+
+.video-info {
+  color: #cbcbcb;
+  /* margin-top: 5px; */
+}
+
+.comments-section {
+  font-family: EnglishFont;
+
+  margin-top: 30px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 20px;
+  color: white;
+}
+
+
+.comment-input textarea {
+  font-family: EnglishFont;
+
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.comment-input button {
+  font-family: EnglishFont;
+  display: none;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: rgb(0, 162, 160);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.suggested-video {
+  color: #eeeeee;
+}
+.suggested-videos {
+  margin-top: 20px;
+}
+
+.suggested-videos .video {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.suggested-videos .video img {
+  width: 100px;
+  height: 70px;
+  margin-right: 10px;
+}
+
+.suggested-videos .video-info {
+  font-size: 14px;
+  color: #e5e5e5;
+}
+.video-likes{
+  width: 3%;
+  margin-left: 5px;
+  margin-bottom: -4px;
+  cursor: pointer;
+}
+.likes-count{
+  margin-left: 150px;
+}
+.comment-list{
+  color: white;
+}
+.comment {
+  font-family: EnglishFont;
+  color: black;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  border: 4px solid #c2ffff;
+  font-size: 16px;
+  line-height: 1.6;
+  position: relative;  
+  text-align: left; 
+}
+
+.comment::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: -10px;
+  width: 10px;
+  height: 10px;
+  background-color: rgb(0, 133, 140);
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  transform: rotate(45deg);
+  box-shadow: rgb(0, 225, 255);
+}
+.background{
+  color: white;
+  opacity: 50%;
+}
+.thumbnail {
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%;
+  object-fit: cover; /* Ensures the video thumbnail covers the area */
+  cursor: pointer;
+  border-radius: 10px;
+}
+.thumbnail:hover{
+  transform: scale(1.02);
+}
+.thumbnail:active{
+  transform: scale(1.2);
+  border-radius: 65px;
+}
+.header {
+  height: 55px;
+  font-family: EnglishFont;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  background-color: rgb(15,15,15);
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: rgb(66, 66, 66);
+}
+.youtube-logo {
+  margin-left: 20px;
+  margin-top: 10px;
+  height: 35px;
+  cursor: pointer;
+}
+.youtube-logo:hover{
+  transform: scale(1.05);}
+  .youtube-logo:active{
+    transform: scale(1.2);}
+.thumbnail-row {
+  height: 10px;
+}
+
+.video-stats {
+  margin-top: -15px;
+  font-family: EnglishFont;
+  color: rgb(157, 157, 157);
+}
+.video-info-grid {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  column-gap: 0.5rem;
+}
+.video-time {
+  font-family: EnglishFont;
+  font-size: 12px; /* Slightly larger font size */
+  font-weight: bold; /* Make the font bold */
+  padding: 2px 4px; /* Adjust padding to fit the text snugly */
+  border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.75); /* Semi-transparent black background */
+  color: white;
+  position: absolute;
+  bottom: 5px; /* Position it at the bottom of the video thumbnail */
+  right: 5px;  /* Align it to the right of the video thumbnail */
+  z-index: 10; /* Ensure it stays on top of other elements */
+}
+
+.video-preview-multi{
+  position: relative; /* Ensure the container is positioned */
+  width: 100%;
+  padding-top: 56.25%; /* Maintain 16:9 aspect ratio */
+  background-color: black;
+  overflow: hidden;
+}
+
+.tooltip-title {
+  display: none; 
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  z-index: 1000;
+  white-space: nowrap; 
+  font-family: EnglishFont;
+  font-size: 18px;
+}
+.video-name:hover + .tooltip-title {
+  display: block; 
+}
+      @media (orientation: portrait) {   
+         .main-content {
+            width: 100%;
+            height: auto; /* Allow height to adjust based on width */
+          }
+          .video-preview {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* Maintain the aspect ratio for standard videos */
+            background-color: black; /* Black background for letterboxing */
+            overflow: hidden;
+          }
+        
+          .video-preview video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%);
+            object-fit: contain; /* Make sure the video fits within the container without being cut off */
+            background-color: black; /* Black background for letterboxing */
+          }
+          .video-preview.mobile {
+            width: 70%;
+            padding-top: 100%; /* Maintain the aspect ratio */
+            margin: 0 auto; /* Center the video container */
+          }
+          .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+          }
+          .sidebar {
+            width: 100%;
+            margin-top: 2rem; /* Add spacing between the comments and sidebar */
+          }
+          .header {
+            height: 38px;
+          }
+          .youtube-logo{
+            height: 28px;
+            margin-top: 5px;
+          }
+
+          .video-likes{
+            height: 50px;
+            width: 50px;
+            margin-bottom: -10px;
+            margin-left: -150px;
+          }
+          .likes-count{
+            font-size: 1.5rem;
+            position: relative;
+            right: 150px; /* Move the element by using right */
+          }
+          .tooltip-title {
+            font-size: 0.75rem;
+          }
+          .video-name {
+            font-size: 1rem;
+          }
+        }
+        
+      
+          
+  
+  

@@ -1,0 +1,178 @@
+
+.thumbnail {
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  max-height: 250px;
+  border-radius: 10px;
+  object-fit: cover;
+  background-color: black;
+}
+.thumbnail:hover{
+  transform: scale(1.02);
+}
+.thumbnail:active{
+  transform: scale(1.2);
+  border-radius: 65px;
+}
+
+
+.video-title {
+  font-family: EnglishFont;
+  color: white;
+  margin-top: 0;
+  font-size: 1rem; /* Use rem for scalable font size */
+  font-weight: 500;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+  text-align: left; 
+}
+
+.video-info-grid {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  column-gap: 0.5rem;
+}
+
+.profile-picture {
+  width: 36px;
+  border-radius: 50px;
+}
+
+.thumbnail-row {
+  margin-bottom: 0.5rem;
+  position: relative;
+  width: 100%;
+  max-height: 250px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-author,
+.video-stats {
+  font-family: EnglishFont;
+  font-size: 0.875rem; /* Use rem for scalable font size */
+  color: rgb(157, 157, 157);
+}
+
+.video-author {
+  margin-bottom: 0.25rem;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns on large screens */
+  gap: 1rem;
+}
+.video-grid-rec {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns on large screens */
+  gap: 1rem;
+}
+.video-time {
+  font-family: EnglishFont;
+  font-size: 0.75rem; /* Use rem for scalable font size */
+  font-weight: 500;
+  padding: 0.25rem;
+  border-radius: 2px;
+  background-color: black;
+  color: white;
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.25rem;
+  opacity: 0.9;
+  border-radius: 5px;
+}
+.tooltip-title {
+  display: none; 
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  z-index: 1000;
+  white-space: nowrap; 
+  font-family: EnglishFont;
+  text-align: left; 
+}
+
+.video-title:hover + .tooltip-title {
+  display: block; 
+}
+
+.video-info {
+  position: relative; /* Position relative to the containing element */
+}
+.head-line-recent{
+  color: white;
+  font-family: EnglishFont;
+  font-size: 20px;
+  display: none;
+  margin-bottom: 10px;
+  margin-top: -30px;
+}
+.head-line-recomend{
+  color: white;
+  font-family: EnglishFont;
+  font-size: 20px;
+  display: none;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+/* Media query for tablets and small screens */
+/* Portrait Mode: Mobile YouTube-Like Layout */
+/* Portrait Mode: Mobile YouTube-Like Layout */
+/* Portrait Mode: Mobile YouTube-Like Layout */
+@media (orientation: portrait) {
+  .video-grid,
+  .video-grid-rec {
+    margin-left: -50px;
+    grid-template-columns: 1fr; /* Single-column layout */
+    gap: 1rem; /* Slightly larger gap */
+  }
+
+  .thumbnail {
+    width: 100%; /* Full width */
+    height: auto; /* Auto to maintain aspect ratio */
+    max-width: 900px; /* Increased max width */
+    max-height: none; /* Remove height constraint */
+    aspect-ratio: 16 / 9; /* Force 16:9 aspect ratio */
+    margin: 0 auto; /* Center the thumbnail */
+  }
+
+  .thumbnail-row {
+    height: auto; /* Automatically adjusts height */
+    max-height: none; /* Remove max height constraint */
+
+  }
+  .video-info {
+    font-size: 1rem;
+  }
+  .video-time {
+    font-size: 2rem; /* More prominent video duration */
+    padding: 0.125rem 0.25rem;
+    bottom: 0.25rem;
+    right: 0.25rem;
+    border-radius: 10px;
+  }
+
+  .head-line-recent,
+  .head-line-recomend {
+    margin-left: -40px;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    display: block; /* Make headings visible */
+    font-size: 3rem; /* Larger font size */
+  }
+  .head-line-recomend{
+    margin-top: 15rem;
+  }
+  .tooltip-title {
+    font-size: 2rem;
+  }
+}
+

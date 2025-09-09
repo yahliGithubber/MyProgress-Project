@@ -1,0 +1,34 @@
+
+
+@font-face {
+  font-family:HebrewFont;
+  src: url(abraham.ttf);
+}
+@font-face {
+  font-family:EnglishFont;
+  src: url(youtube-sans-bold.ttf);
+}
+
+body  {
+  margin: 0;
+  padding-top: 80px;
+  padding-left: 96px;
+  padding-right: 24px;
+  background-color: rgb(25, 25, 25);
+}
+.opacity-popup{
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+main{
+  width: 105%;  /* Increases width by 10% */
+  height: 105%;
+  margin-left: -80px;
+}
+@media (orientation: portrait) {
+  main{
+    width: 100%;  /* Increases width by 10% */
+    height: 100%;
+    margin-left: 0px;
+  }
+}

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shorts </title>
+    <link rel="icon" type="image/x-icon" href="z-icons/logo.ico">
+    <link rel="stylesheet" href="styles/shorts.css">
+    
+  </head>
+  <body>
+    <div class="header">
+      <img class="youtube-logo js-youtube-logo" src="z-icons/logo-icon.png">
+      </div>
+      <div class="container">
+    <div class="video-js">
+    </div>
+    <div class="next-video">
+    </div>
+    <div class="before-video">
+    </div>
+  </div>
+    <script>
+        document.querySelector('.js-youtube-logo').addEventListener('click', (event) => { 
+          event.preventDefault();
+          window.location.href = '/index.html';
+        });
+        const videoList = JSON.parse(localStorage.getItem('videoListShorts')) || [];
+        videoList.sort(() => Math.random() - 0.5);
+        let videoShorts = [];
+        let counter=0;
+        let countShorts=0;
+        let previous;
+        let previous2;
+        let next;
+        let next2;
+        let count=0;
+        let current;
+        let countArrows=0;
+        for (let i=0; i < videoList.length; i++){
+        if ((videoList[i].height > videoList[i].width)&&(videoList[i].length<60)) {
+        countShorts++;
+        }
+      }
+ 
+        for (counter; counter < videoList.length; counter++){
+        if ((videoList[counter].height > videoList[counter].width)&&(videoList[counter].length<60)) {
+        videoDataPreview(videoList, counter, '.video-js', "video-wrapper", 'autoplay controls>');
+        previous = counter;
+        // previous2 = previous;
+        counter++;
+        count++;
+          break;
+        }
+      }
+      for (counter; counter < videoList.length; counter++){
+        if ((videoList[counter].height > videoList[counter].width)&&(videoList[counter].length<60)) {
+          videoDataPreview(videoList, counter, '.next-video', "video-wrapper2", '');
+          next = counter;
+          counter++;
+          count++;
+          break;
+        }
+      }
+
+      let isScrolling = false;
+      document.querySelector('body').addEventListener('wheel', (event) => {
+        if (isScrolling) return;
+        isScrolling = true;
+        setTimeout(() => {
+          isScrolling = false;
+        }, 400);
+        const videoElement = document.querySelector('.video-wrapper');
+        const nextVideoElement = document.querySelector('.video-wrapper2');
+        if (((event.deltaY > 0) || (event.deltaY < 0)) && (countShorts === 1)){
+          console.log('this is the only video');
+          alert('this is the only video');
+        } else if (event.deltaY > 0) {
+          handleArrowDown(videoElement, nextVideoElement);
+        } else if (event.deltaY < 0 && (countArrows > 0)) {
+          handleArrowUp(videoElement);
+        } else if (event.deltaY < 0) {
+          console.log('this is the first video');
+          alert('You have reached the first video');
+        }
+      });
+
+
+
+
+      let isArrowing = false;
+      document.querySelector('body').addEventListener('keydown', (event) => {
+        if (isArrowing) return;
+        isArrowing = true;
+        setTimeout(() => {
+          isArrowing = false;
+        }, 400);
+        const videoElement = document.querySelector('.video-wrapper');
+        const nextVideoElement = document.querySelector('.video-wrapper2');
+        if (((event.key === 'ArrowDown') || (event.key === 'ArrowUp')) && (countShorts === 1)) {
+          console.log('this is the only video');
+          alert('this is the only video');
+        } else if (event.key === 'ArrowDown') {
+          handleArrowDown(videoElement, nextVideoElement);
+        } else if (event.key === 'ArrowUp' && (countArrows > 0)) {
+          handleArrowUp(videoElement);
+        } else if (event.key === 'ArrowUp') {
+          console.log('this is the first video');
+          alert('You have reached the first video');
+        }
+      });
+
+      let isPhoning = false;
+      let startY = 0; // To store the touch starting Y position
+
+      document.querySelector('body').addEventListener('touchstart', (event) => {
+        // Capture the initial Y position of the touch
+        startY = event.touches[0].clientY;
+      });
+
+      document.querySelector('body').addEventListener('touchmove', (event) => {
+        if (isPhoning) return;
+
+        // Calculate the distance moved in the Y direction
+        let deltaY = startY - event.touches[0].clientY;
+
+        // Set a scrolling timeout to prevent frequent video changes
+        isPhoning = true;
+        setTimeout(() => {
+          isPhoning = false;
+        }, 400);
+
+        const videoElement = document.querySelector('.video-wrapper');
+        const nextVideoElement = document.querySelector('.video-wrapper2');
+
+        // Detect swipe up or swipe down
+        if ((Math.abs(deltaY) > 0) && (countShorts === 1)) {
+          console.log('this is the only video');
+          alert('this is the only video');
+        } else if (deltaY > 0) { // Swipe up (same as scrolling down)
+          handleArrowDown(videoElement, nextVideoElement);
+        } else if (deltaY < 0 && (countArrows > 0)) { // Swipe down (same as scrolling up)
+          handleArrowUp(videoElement);
+        } else if (deltaY < 0) {
+          console.log('this is the first video');
+          alert('You have reached the first video');
+        }
+      });
+
+
+
+      function handleArrowDown(videoElement, nextVideoElement) {
+        if (count <= countShorts) {
+          nextVideoElement.classList.add('video-down');
+          videoElement.classList.add('video-up');
+          setTimeout(() => {
+            nextVideoElement.classList.remove('video-down');
+            videoElement.classList.remove('video-up');
+            videoDataPreview(videoList, next, '.video-js', "video-wrapper", 'autoplay controls>');
+            current = next;
+            let foundNext = false;
+
+            for (counter = next + 1; counter < videoList.length; counter++) {
+              if ((videoList[counter].height > videoList[counter].width) && (videoList[counter].length < 60)) {
+                videoDataPreview(videoList, counter, '.next-video', "video-wrapper2", '');
+                next2 = next;
+                next = counter;
+                foundNext = true;
+                counter++;
+                count++;
+                break;
+              }
+            }
+
+            videoDataPreview(videoList, previous, '.before-video', "video-wrapper3", '');
+            previous2 = previous;
+            previous = current;
+            countArrows++;
+            if (!foundNext) {
+              count++;
+              videoDataPreview(videoList, -1, '.next-video', "video-wrapper2", '');
+            }
+          }, 400);
+        } else {
+          console.log('this is the last video');
+          alert('You have reached the last video');
+        }
+      }
+
+    function handleArrowUp(videoElement) {
+      const preVideoElement = document.querySelector('.video-wrapper3');
+      preVideoElement.classList.add('video-down');
+      videoElement.classList.add('video-very-down');
+
+      setTimeout(() => {
+        preVideoElement.classList.remove('video-down');
+        videoElement.classList.remove('video-very-down');
+
+        videoDataPreview(videoList, previous2, '.video-js', "video-wrapper", 'autoplay controls>');
+        current = previous2;
+        let foundPrevious = false;
+
+        for (counter = previous2 - 1; counter >= 0; counter--) {
+          if ((videoList[counter].height > videoList[counter].width) && (videoList[counter].length < 60)) {
+            videoDataPreview(videoList, counter, '.before-video', "video-wrapper3", '');
+            foundPrevious = true;
+            count--;
+            counter--;
+            break;
+          }
+        }
+
+        if (countShorts === 2) {
+          videoDataPreview(videoList, next, '.next-video', "video-wrapper2", '');
+        } else {
+          videoDataPreview(videoList, next2, '.next-video', "video-wrapper2", '');
+        }
+
+        next = previous;
+        previous = previous2;
+        previous2 = counter + 1;
+        next2 = current;
+        countArrows--;
+
+        if (!foundPrevious) {
+          count--;
+          videoDataPreview(videoList, -1, '.before-video', "video-wrapper3", '');
+        }
+      }, 400);
+      }
+      //   document.querySelector('.video-likes').addEventListener('click', () => {
+      //     const likeIcon = document.querySelector('.video-likes');
+      //     const likesCountElement = document.querySelector('.likes-count');
+      //     let likesCount = parseInt(likesCountElement.textContent.replace('Likes: ', ''), 10);
+      //     let isLiked = likeIcon.src.includes("z-icons/unlike.png");
+
+      //     likeIcon.src = isLiked ? "z-icons/like.png" : "z-icons/unlike.png";
+      //     likesCount += isLiked ? 1 : -1;
+      //     likesCountElement.textContent = `${likesCount}`;
+      //     console.log(videoList[counter]);
+      //     fetch(isLiked ? '/update-likes' : '/remove-likes', {
+      //         method: 'POST',
+      //         headers: {
+      //             'Content-Type': 'application/json'
+      //         },
+      //         body: JSON.stringify({ id: videoList[counter].id, likes: likesCount })
+      //     }).catch(error => console.error('Error updating likes:', error));
+      // });
+
+      function videoDataPreview(videoList, counter, nameClass, wrapper, autoplay) {
+    let videosHTML = '';
+    if (counter === -1) {
+        document.querySelector(nameClass).innerHTML = ''; 
+        return;
+    }
+    let videoTitle = videoList[counter].name;
+    videosHTML += `
+        <div class="${wrapper}">
+            <video id="myVideo" class="thumbnail js-video" src="/uploads/${videoList[counter].id}" ${autoplay}></video>
+            <p class="video-name">${videoTitle}</p> 
+            <span class="likes-count">${videoList[counter].likes}</span>
+            <img src="z-icons/unlike.png" class="video-likes" alt="Like button">
+        </div>`;
+
+    document.querySelector(nameClass).innerHTML = videosHTML;
+
+    // Assign event listener for the like button after the HTML is rendered
+    document.querySelector('.video-likes').addEventListener('click', () => {
+        const likeIcon = document.querySelector('.video-likes');
+        const likesCountElement = document.querySelector('.likes-count');
+        let likesCount = parseInt(likesCountElement.textContent.replace('Likes: ', ''), 10);
+        let isLiked = likeIcon.src.includes("z-icons/unlike.png");
+
+        // Toggle the like/unlike icon and adjust the likes count
+        if (isLiked) {
+            likeIcon.src = "z-icons/like.png";
+            likesCount += 1;
+        } else {
+            likeIcon.src = "z-icons/unlike.png";
+            likesCount -= 1;
+        }
+        likesCountElement.textContent = `${likesCount}`;
+
+        // Update the likes count on the server
+        fetch(isLiked ? '/update-likes' : '/remove-likes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: videoList[counter].id, likes: likesCount })
+        }).catch(error => console.error('Error updating likes:', error));
+    });
+
+    // Handle Hebrew text styling
+    const hebrewRegex = /[\u0590-\u05FF]/;
+    textChangeToHebrew('.video-name');
+    function textChangeToHebrew(elementClass) {
+        document.querySelectorAll(elementClass).forEach(element => {
+            if (hebrewRegex.test(element.textContent)) {
+                element.style.fontFamily = 'HebrewFont';
+                element.style.direction = 'rtl'; 
+            }
+        });
+    }
+}
+
+
+
+
+    </script>
+  </body>
+  </html>
+

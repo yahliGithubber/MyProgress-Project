@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MyProgress </title>
+    <link rel="icon" type="image/x-icon" href="z-icons/logo.ico">
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"> -->
+
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/video.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
+  </head>
+  <body>
+  <div class="opacity-popup">
+    <header class="header">
+      <div class="left-section">
+        <img class="hamburger-menu" src="z-icons/menu-icon.png">
+        <img class="youtube-logo js-youtube-logo" src="z-icons/logo-icon.png">
+      </div>
+      <div class="middle-section">
+        <img class="arrow-img" src="z-icons/arrow.png">
+        <input class="search-bar js-search-bar" type="text" placeholder="Search" >
+        <button class="search-button js-search-button">
+          <img class="search-icon" src="z-icons/search-icon.png">
+          <div class="tooltip">Search</div>
+        </button>
+        <img class="search-icon-mobile" src="z-icons/search-icon.png">
+      </div>
+      <div class="right-section">
+        <button class="upload-button2" id="openTab">
+        <img class="js-upload upload2" src="z-icons/camera-icon.png" >   
+        <div class="tooltip">Upload a Video</div>  
+      </button>
+
+
+        <button class="profile-button">
+          <img class="current-user-picture" src="z-icons/profile-icon.png">
+          <div class="tooltip">Panda Boy</div>
+        </button>
+      </div>
+    </header>
+    
+
+    <nav class="sidebar">
+      <div class="sidebar-link-home">
+        <img class="home-style" src="z-icons/home-icon.png">
+        <div>Home</div>
+      </div>
+      <div class="sidebar-link-shorts">
+        <img class="shorts-style" src="z-icons/shorts-icon.png">
+        <div>Shorts</div>
+      </div>
+      <div class="sidebar-link-subcriptions">
+        <img class="subcriptions-style" src="z-icons/subcriptions-icon.png">
+        <div>Subscriptions</div>
+      </div>
+      <div class="sidebar-link-you">
+        <img class="you-style" src="z-icons/you-icon.png">
+        <div>You</div>
+      </div>
+    </nav>
+
+    <h1 id="video-list"></h1>
+
+    <main>
+      <h class="head-line-recent"> videos recently uploaded</h>
+      <div class="video-grid js-videos">
+      </div>
+      <h class="head-line-recomend"> videos recomended</h>
+      <div class="video-grid-rec js-videos-recomend">
+      </div>
+    </main>
+  </div>
+    <div id="popupTab" class="popup">
+      <button class="close-button" id="closeTab"></button>
+      <img class="close-image" src="z-icons/close-icon.png">
+      <div class="uploaded-uploading">
+      <div class="uploading-section">
+      <img class="upload-image" src="z-icons/upload.png">
+      </div>
+      <div class="uploaded-section">
+        <img class="check-image" src="z-icons/check-icon.png">
+        <div class="video-uploaded-text">video uploaded successfully!</div>
+      </div>
+    </div>
+    
+      <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" class="uploadForm" >
+        <div class="custom-file-input" style="display: block;" >
+          <label for="video-upload" class="choose-file-button">Choose Video</label>
+          <input type="file" id="video-upload" name="video" accept="video/*" required>  
+      </div>
+
+      <div class="video-preview" style="display: block;">
+        <div class="video-preview-text" style="display: none;">Video Preview:</div>
+        <video id="video-preview" controls> 
+        </video>
+    </div>
+
+        <input type="text" class="input-text" name="videoName" placeholder="Enter video name" >
+        <img src="z-icons/loading.gif" class="loading">
+        <p style="display: none; color:red;" class="enter-videoName">pls enter a video name</p>
+        <p style="display: none; color:red;" class="select-video">pls select a video</p>
+        <p style="display: none; color:red;" class="max-len">you have reached the max</p>
+        <button  type="submit" class="upload-button-submit">UPLOAD</button>
+    </form>
+    <button class="next-button" >NEXT</button>
+    <button class="back-button" >BACK</button>
+    <button class="done-button" >DONE</button>
+    <button class="loading-button" >LOADING</button>
+      </div>
+
+    <script type="module" src="../scripts/general-page.js" ></script>
+  </body>
+</html>

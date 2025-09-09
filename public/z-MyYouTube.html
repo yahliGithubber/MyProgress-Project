@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="z-icons/logo.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>change to name of the video</title>
+    <link rel="stylesheet" href="styles/video-z.css">
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <div class="video-player">
+                <div class="header">
+                <img class="youtube-logo js-youtube-logo" src="z-icons/logo-icon.png">
+                </div>
+                <div class="video-preview video-js">
+                </div>
+
+                <h1 class="video-title"></h1>
+                <div class="video-info">
+                    <span class="video-views"></span> &#183;
+                    <span class="video-date"></span> &#183;
+                    <span class="likes-count"></span>
+                    <img src="z-icons/unlike.png" class="video-likes" alt="Like button">
+                </div>
+            </div>
+            <div class="comments-section">
+                <h2>Comments</h2>
+                <div class="comment-input">
+                    <textarea placeholder="Add a comment..." class="comment-input-js"></textarea>
+                    <button class="comment-button">Comment</button>
+                </div>
+                <div class="comment-list">
+                    <!-- Comments will be loaded here -->
+                </div>
+            </div>
+        </div>
+        <div class="sidebar">
+            <h3 class="suggested-video">Suggested Videos</h3>
+            <div class="suggested-videos">
+                <!-- Suggested videos will be loaded here -->
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoId = localStorage.getItem('selectedVideoId');
+            const videoList = JSON.parse(localStorage.getItem('videoList')) || [];
+            const videoData = videoList.find(video => `../../uploads/${video.id}` === videoId);
+
+            if (videoData) {
+                const isoDateString = videoData.date;
+                const date = new Date(isoDateString);
+                const formattedDate = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
+
+                document.querySelector('.video-js').innerHTML = `<video src="${videoId}" controls></video>`;
+                document.querySelector('.video-title').textContent = videoData.name;
+                document.querySelector('.video-views').textContent = `Views: ${videoData.views}`;
+                document.querySelector('.video-date').textContent = `Uploaded on: ${formattedDate}`;
+                document.querySelector('.likes-count').textContent = videoData.likes;
+
+                if (videoData.comments) {
+                    const commentsHTML = videoData.comments.map(comment => `<p class="comment">${comment.text}</p>`).join('');
+                    document.querySelector('.comment-list').innerHTML = commentsHTML;
+                }
+
+                // Adjust video preview for mobile layout if necessary
+                document.querySelectorAll('.video-preview video').forEach(video => {
+                    video.addEventListener('loadedmetadata', function () {
+                        if (this.videoHeight > this.videoWidth || (this.videoWidth <= 640 && this.videoHeight <= 360)) {
+                            video.closest('.video-preview').classList.add('mobile');
+                        }
+                    });
+                });
+
+                // Handle like button click
+                document.querySelector('.video-likes').addEventListener('click', () => {
+                    const likeIcon = document.querySelector('.video-likes');
+                    const likesCountElement = document.querySelector('.likes-count');
+                    let likesCount = parseInt(likesCountElement.textContent.replace('Likes: ', ''), 10);
+                    let isLiked = likeIcon.src.includes("z-icons/unlike.png");
+
+                    likeIcon.src = isLiked ? "z-icons/like.png" : "z-icons/unlike.png";
+                    likesCount += isLiked ? 1 : -1;
+                    likesCountElement.textContent = `${likesCount}`;
+
+                    fetch(isLiked ? '/update-likes' : '/remove-likes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ id: videoData.id, likes: likesCount })
+                    }).catch(error => console.error('Error updating likes:', error));
+                });
+                document.querySelector('.comment-input-js').addEventListener('input', (event) => { 
+                    const commentInput = document.querySelector('.comment-input-js').value;
+                    if (commentInput === ''){
+                        document.querySelector('.comment-input button').style.display = 'none';
+                    } else{
+                        document.querySelector('.comment-input button').style.display = 'block';
+                    }
+                });
+                document.querySelector('.comment-button').addEventListener('click', () => {
+                    const commentInput = document.querySelector('.comment-input-js').value;
+                    if (commentInput.trim()) {
+                        const newCommentHTML = `<p class="comment">${commentInput}</p>`;
+                        document.querySelector('.comment-list').innerHTML += newCommentHTML;
+
+                        fetch('/update-comments', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ id: videoData.id, comment: commentInput })
+                        }).catch(error => console.error('Error updating comments:', error));
+
+                        document.querySelector('.comment-input-js').value = '';
+                    }
+                });
+
+                videoDataPreview(videoList,videoData);
+            }
+
+            function videoDataPreview(videoList,videoData) {
+                let videosHTML = '';
+                let count = 0;
+                const videoId=videoData.id;
+                videoList.sort(() => Math.random() - 0.5);
+
+                for (let video of videoList) {
+                    // console.log(video);
+                    if (count >= 8){
+                     break;
+                    }
+                    count++;
+
+                    let videoLen = formatVideoLength(video.length);
+                    let videoDateOriginal = formatVideoDate(video.date);
+                    if (video.id !== videoId){
+                    let lengthChecker =false;
+                    const lengthTitle = video.name.length;
+                    let videoTitle = video.name;
+                    let videoName= video.name;
+                    if (lengthTitle>40){
+                    videoTitle = videoName.slice(0,40)+"...";
+                    lengthChecker =true;
+                    }
+                    if (lengthChecker){
+                    videosHTML += `
+                    <div class="video-preview-suggested">
+                        <div class="thumbnail-row"></div>
+                        <div class="video-preview-multi">
+                        <video id="myVideo" class="thumbnail js-video" src="../../uploads/${video.id}"></video>
+                        <div class="video-time js-time">${videoLen}</div>
+                        </div>
+                        <div class="video-info-grid"></div>
+                        <div class="video-info">
+                            <p class="video-name">${videoTitle}</p>
+                            <div class="tooltip-title">${videoName}</div>
+                            <p class="video-stats">${video.views} views &#183; ${videoDateOriginal}</p>      
+                        </div>
+                    </div>`;
+                } else{
+                    videosHTML += `
+                    <div class="video-preview-suggested">
+                        <div class="thumbnail-row"></div>
+                        <div class="video-preview-multi">
+                        <video id="myVideo" class="thumbnail js-video" src="../../uploads/${video.id}"></video>
+                        <div class="video-time js-time">${videoLen}</div>
+                        </div>
+                        <div class="video-info-grid"></div>
+                        <div class="video-info">
+                            <p class="video-name">${videoTitle}</p>
+                            <p class="video-stats">${video.views} views &#183; ${videoDateOriginal}</p>      
+                        </div>
+                    </div>`;
+                };
+                }
+            }
+
+                document.querySelector('.suggested-videos').innerHTML = videosHTML;
+
+                const hebrewRegex = /[\u0590-\u05FF]/;
+                textChangeToHebrew('.comment');
+                textChangeToHebrew('.video-title');
+                textChangeToHebrew('.video-name');
+                function textChangeToHebrew(elementClass){
+                document.querySelectorAll(elementClass).forEach(element => {
+                if (hebrewRegex.test(element.textContent)) {
+                    element.style.fontFamily = 'HebrewFont';
+                    element.style.direction = 'rtl'; 
+                }
+                });
+            }
+
+                document.querySelector('.js-youtube-logo').addEventListener('click', (event) => { 
+                event.preventDefault();
+                window.location.href = '/';
+                });
+
+                document.querySelectorAll('.js-video').forEach(video => {
+                    video.addEventListener('click', () => {
+                        const videoSrc = video.getAttribute('src');
+                        const selectedVideoData = videoList.find(v => `../../uploads/${v.id}` === videoSrc);
+                        if (selectedVideoData) {
+                            fetch('/update-views', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ id: selectedVideoData.id })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    localStorage.setItem('selectedVideoId', videoSrc);
+                                    localStorage.setItem('videoList', JSON.stringify(videoList));
+                                    window.location.href= "../z-MyYouTube.html";
+                                }
+                            })
+                            .catch(error => console.error('Error updating views:', error));
+                        }
+                    });
+                });
+            }
+
+            function formatVideoLength(Elength) {
+                const length = Math.floor(Elength);
+                let minutes = Math.floor(length / 60);
+                let seconds = length % 60;
+                return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }
+
+            function formatVideoDate(dateString) {
+                const now = new Date();
+                const videoDate = new Date(dateString);
+                const secondsAgo = Math.floor((now - videoDate) / 1000);
+                
+                if (secondsAgo < 60) return `${secondsAgo} seconds ago`;
+                if (secondsAgo < 3600) return `${Math.floor(secondsAgo / 60)} minutes ago`;
+                if (secondsAgo < 86400) return `${Math.floor(secondsAgo / 3600)} hours ago`;
+                if (secondsAgo < 604800) return `${Math.floor(secondsAgo / 86400)} days ago`;
+                if (secondsAgo < 2592000) return `${Math.floor(secondsAgo / 604800)} weeks ago`;
+                if (secondsAgo < 31104000) return `${Math.floor(secondsAgo / 2592000)} months ago`;
+                return `${Math.floor(secondsAgo / 31104000)} years ago`;
+            }
+        });
+    </script>
+</body>
+</html>
